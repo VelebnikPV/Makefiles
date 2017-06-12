@@ -12,8 +12,9 @@ hello: main.o module.o m1.o m2.o
 
 main.o: src/main.c
 	$(CC) $(INCLUDE) $(INCLUDE_M1) $(INCLUDE_M2) $(CFLAGS) src/main.c -o output/main.o
+	$(CC) $(INCLUDE) $(INCLUDE_M1) $(INCLUDE_M2) -S src/main.c -o output/main.s
 
-module.o: src/module.c
+module.o: src/module.c 
 	$(CC) $(INCLUDE) $(CFLAGS) src/module.c -o output/module.o
 
 m1.o: src/m1/m1.c
@@ -21,3 +22,18 @@ m1.o: src/m1/m1.c
 
 m2.o: src/m1/m1.c
 	$(CC) $(INCLUDE_M2) $(CFLAGS) src/m2/m2.c -o output/m2.o
+
+
+
+install: hello
+	install -D output/hello /home/$(USER)/bin
+
+install-strip: hello
+	install -D -s output/hello /home/$(USER)/bin
+
+uninstall:
+	-rm /home/$(USER)/bin
+
+.PHONY : clean
+clean :
+	rm *.o
